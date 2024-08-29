@@ -1,5 +1,6 @@
 import axios from "axios"
 import { useState } from "react"
+import { render, localhost } from "./api"
 
 export default function SubjectForm(props) {
     const {addSubject} = props
@@ -8,7 +9,7 @@ export default function SubjectForm(props) {
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            const response = await axios.post('https://students-grade-system-backend.onrender.com/api/subjects', { name })
+            const response = await axios.post(`${render}/api/subjects`, { name })
             console.log(response.data)
             addSubject(response.data)
         } catch(err) {

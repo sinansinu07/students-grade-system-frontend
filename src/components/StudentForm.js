@@ -1,5 +1,6 @@
 import axios from "axios"
 import { useState } from "react"
+import { render, localhost } from "./api"
 
 export default function StudentForm(props) {
     const {subjects, addStudent} = props
@@ -17,7 +18,7 @@ export default function StudentForm(props) {
         }
 
         try {
-            const response = await axios.post('https://students-grade-system-backend.onrender.com/api/students', form)
+            const response = await axios.post(`${render}/api/students`, form)
             // console.log(response.data)
             addStudent(response.data)
         } catch(err) {

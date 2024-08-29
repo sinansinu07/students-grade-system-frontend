@@ -4,6 +4,7 @@ import {Button} from "reactstrap"
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import SubjectForm from "./SubjectFrom";
 import StudentForm from "./StudentForm";
+import { render, localhost } from "./api";
 
 export default function Home() {
 
@@ -12,6 +13,7 @@ export default function Home() {
     const [ search, setSearch ] = useState("")
     const [ sortBy, setSortBy ] = useState("")
     const [ order, setOrder ] = useState("")
+    const [ filterBy, setFilterBy ] = useState("")
 
     const [ modal1, setModal1 ] = useState(false)
     const [ modal2, setModal2 ] = useState(false)
@@ -27,9 +29,9 @@ export default function Home() {
     useEffect( () => {
         ( async () => {
             try {
-                const subjectResponse = await axios.get("https://students-grade-system-backend.onrender.com/api/subjects")
+                const subjectResponse = await axios.get(`${render}/api/subjects`)
                 setSubjects(subjectResponse.data)
-                const studentsResponse = await axios.get(`https://students-grade-system-backend.onrender.com/api/students?sortBy=${sortBy}&order=${order}&search=${search}`)
+                const studentsResponse = await axios.get(`${render}/api/students?sortBy=${sortBy}&order=${order}&search=${search}`)
                 setStudents(studentsResponse.data)
             } catch(err) {
                 console.error(err)
@@ -49,7 +51,7 @@ export default function Home() {
         const confirmation = window.confirm("Are  you sure to delete this Subject?")
         if(confirmation) {
           try {
-            await axios.delete(`https://students-grade-system-backend.onrender.com/api/subjects/${id}`)
+            await axios.delete(`${render}/api/subjects/${id}`)
             removeSubject(id)
           } catch(err) {
             alert(err.message)
@@ -72,7 +74,7 @@ export default function Home() {
         const confirmation = window.confirm("Are  you sure to delete the details of the Student?")
         if(confirmation) {
           try {
-            await axios.delete(`https://students-grade-system-backend.onrender.com/api/students/${id}`)
+            await axios.delete(`${render}/api/students/${id}`)
             removeStudent(id)
           } catch(err) {
             alert(err.message)
@@ -131,11 +133,11 @@ export default function Home() {
             </Modal>
             <hr/>
             <h2>Total Students : {students.length}</h2>
-            <div className="d-flex justify-content-between px-4 m-0">
+            <div className="d-flex flex-row justify-content-between px-4 m-0">
                 <input
                     style={{
                     marginBottom: "10px",
-                    width: "20%",
+                    width: "15%",
                     }}
                     type="text"
                     placeholder="Search..."
@@ -145,40 +147,53 @@ export default function Home() {
                     name="search"
                     className="form-control"
                 />
-                <div className="d-flex justify-content-end">
-                    <select
-                        className="form-select"
-                        style={{
-                            marginRight: "10px",
-                            marginBottom: "10px",
-                            width: "30%",
-                        }}
-                            value={sortBy}
-                            onChange={(e)=> setSortBy(e.target.value)}
-                            id="sortBy"
-                        >
-                            <option value="">Sort By</option>
-                            <option value="name">Name</option>
-                            <option value="subject">Subject</option>
-                            <option value="grade">Grade</option>
-                            <option value="remarks">Remarks</option>
-                    </select>
-                    <select
-                        className="form-select"
-                        style={{
-                            marginRight: "190px",
-                            marginBottom: "10px",
-                            width: "30%",
-                        }}
-                            value={order}
-                            onChange={(e)=> setOrder(e.target.value)}
-                            id="order"
-                        >
-                            <option value="">Order</option>
-                            <option value="asc">Ascending</option>
-                            <option value="desc">Descending</option>
-                    </select>
-                </div>
+                <select
+                    className="form-select"
+                    style={{
+                    marginRight: "10px",
+                    marginBottom: "10px",
+                    width: "15%",
+                    }}
+                    value={filterBy}
+                    onChange={(e) => setFilterBy(e.target.value)}
+                    id="filterBy"
+                >
+                    <option value="">All Students</option>
+                    <option value="PASS">Passed Students</option>
+                    <option value="FAIL">Failed Students</option>
+                </select>
+                <select
+                    className="form-select"
+                    style={{
+                    marginRight: "10px",
+                    marginBottom: "10px",
+                    width: "15%",
+                    }}
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value)}
+                    id="sortBy"
+                >
+                    <option value="">Sort By</option>
+                    <option value="name">Name</option>
+                    <option value="subject">Subject</option>
+                    <option value="grade">Grade</option>
+                    <option value="remarks">Remarks</option>
+                </select>
+                <select
+                    className="form-select"
+                    style={{
+                    marginRight: "190px",
+                    marginBottom: "10px",
+                    width: "15%",
+                    }}
+                    value={order}
+                    onChange={(e) => setOrder(e.target.value)}
+                    id="order"
+                >
+                    <option value="">Order</option>
+                    <option value="asc">Ascending</option>
+                    <option value="desc">Descending</option>
+                </select>
             </div>
             {students.length !== 0 ? (
                 <div>
@@ -194,7 +209,9 @@ export default function Home() {
                             </tr>
                         </thead>
                         <tbody>
-                            {students.map((ele, i) => {
+                            {students.filter((ele) => {
+                                return ele.remarks.includes(filterBy)
+                            }).map((ele, i) => {
                                 return (
                                     <tr key={ele._id}>
                                         <td>{i + 1}</td>
