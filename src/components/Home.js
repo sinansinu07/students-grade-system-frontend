@@ -27,9 +27,9 @@ export default function Home() {
     useEffect( () => {
         ( async () => {
             try {
-                const subjectResponse = await axios.get("http://localhost:5001/api/subjects")
+                const subjectResponse = await axios.get("https://students-grade-system-backend.onrender.com/api/subjects")
                 setSubjects(subjectResponse.data)
-                const studentsResponse = await axios.get(`http://localhost:5001/api/students?sortBy=${sortBy}&order=${order}&search=${search}`)
+                const studentsResponse = await axios.get(`https://students-grade-system-backend.onrender.com/api/students?sortBy=${sortBy}&order=${order}&search=${search}`)
                 setStudents(studentsResponse.data)
             } catch(err) {
                 console.error(err)
@@ -49,7 +49,7 @@ export default function Home() {
         const confirmation = window.confirm("Are  you sure to delete this Subject?")
         if(confirmation) {
           try {
-            await axios.delete(`http://localhost:5001/api/subjects/${id}`)
+            await axios.delete(`https://students-grade-system-backend.onrender.com/api/subjects/${id}`)
             removeSubject(id)
           } catch(err) {
             alert(err.message)
@@ -72,7 +72,7 @@ export default function Home() {
         const confirmation = window.confirm("Are  you sure to delete the details of the Student?")
         if(confirmation) {
           try {
-            await axios.delete(`http://localhost:5001/api/students/${id}`)
+            await axios.delete(`https://students-grade-system-backend.onrender.com/api/students/${id}`)
             removeStudent(id)
           } catch(err) {
             alert(err.message)

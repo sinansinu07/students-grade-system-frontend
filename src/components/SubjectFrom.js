@@ -8,7 +8,7 @@ export default function SubjectForm(props) {
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            const response = await axios.post('http://localhost:5001/api/subjects', { name })
+            const response = await axios.post('https://students-grade-system-backend.onrender.com/api/subjects', { name })
             console.log(response.data)
             addSubject(response.data)
         } catch(err) {

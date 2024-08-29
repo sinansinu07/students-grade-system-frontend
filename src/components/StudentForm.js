@@ -17,7 +17,7 @@ export default function StudentForm(props) {
         }
 
         try {
-            const response = await axios.post('http://localhost:5001/api/students', form)
+            const response = await axios.post('https://students-grade-system-backend.onrender.com/api/students', form)
             // console.log(response.data)
             addStudent(response.data)
         } catch(err) {
