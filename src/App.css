@@ -36,3 +36,22 @@
     transform: rotate(360deg);
   }
 }
+
+.table {
+  margin-left: 20px;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.table th, .table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.table thead th {
+  border-top: 2px solid #333;
+  border-bottom: 2px solid #333;
+  border-left: 2px solid #333;
+  border-right: 2px solid #333;
+}
